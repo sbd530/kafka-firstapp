@@ -9,14 +9,14 @@ public class FirstAppProducer {
     private static String topicName = "first-app";
 
     public static void main(String[] args) {
-        // KafkaProducer Configuration
+        // [1] KafkaProducer Configuration
         Properties conf = new Properties();
         /*conf.setProperty("bootstrap.servers", "kafka-broker01:9092,kafka-broker02:9092,kafka-broker03:9092");*/
         conf.setProperty("bootstrap.servers", "localhost:9092");
         conf.setProperty("key.serializer", "org.apache.kafka.common.serialization.IntegerSerializer");
         conf.setProperty("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
-        // Object for producing messages to KafkaCluster
+        // [2] Object for producing messages to KafkaCluster
         Producer<Integer, String> producer = new KafkaProducer<>(conf);
 
         int key;
@@ -26,10 +26,10 @@ public class FirstAppProducer {
             key = i;
             value = String.valueOf(i);
 
-            // Record to be produced
+            // [3] Record to be produced
             ProducerRecord<Integer, String> record = new ProducerRecord<>(topicName, key, value);
 
-            // Callback for Ack after Producing
+            // [4] Callback for Ack after Producing
             producer.send(record, new Callback() {
                 @Override
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
@@ -46,7 +46,7 @@ public class FirstAppProducer {
             });
         }
 
-        // Close KafkaProducer and exit
+        // [5] Close KafkaProducer and exit
         producer.close();
     }
 }
